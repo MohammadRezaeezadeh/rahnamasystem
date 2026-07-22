@@ -1,0 +1,395 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" fill="none" stroke="none">
+  <defs>
+    <radialGradient id="khorasanGlow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#fca5a5" stop-opacity="1"/>
+      <stop offset="40%" stop-color="#ef4444" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#7f1d1d" stop-opacity="0.9"/>
+    </radialGradient>
+
+    <linearGradient id="iranFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(148, 163, 184, 0.08)"/>
+      <stop offset="100%" stop-color="rgba(148, 163, 184, 0.04)"/>
+    </linearGradient>
+
+    <linearGradient id="trunkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1a0f08"/>
+      <stop offset="50%" stop-color="#5d3a20"/>
+      <stop offset="100%" stop-color="#1a0f08"/>
+    </linearGradient>
+
+    <radialGradient id="leafGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#bef264" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#84cc16" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#365314" stop-opacity="0.4"/>
+    </radialGradient>
+
+    <filter id="redGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="leafGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/>
+      <feOffset dx="0" dy="1.5" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <pattern id="dotPattern" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="0.6" fill="rgba(148, 163, 184, 0.12)"/>
+    </pattern>
+  </defs>
+
+  <style>
+    .iran-outline {
+      fill: url(#iranFill);
+      stroke: rgba(203, 213, 225, 0.65);
+      stroke-width: 1.6;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+    .province-line {
+      fill: none;
+      stroke: rgba(148, 163, 184, 0.16);
+      stroke-width: 0.6;
+      stroke-dasharray: 3 4;
+    }
+    .khorasan-region {
+      fill: url(#khorasanGlow);
+      stroke: rgba(251, 191, 36, 0.6);
+      stroke-width: 1;
+      filter: url(#redGlow);
+    }
+    .tree-trunk { fill: url(#trunkGrad); }
+    .tree-branch { stroke: #3d2415; stroke-width: 2.5; fill: none; stroke-linecap: round; }
+    .tree-branch.thin { stroke-width: 1.4; }
+    .leaf { fill: url(#leafGrad); filter: url(#leafGlow); }
+    .number { fill: rgba(255, 255, 255, 0.95); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; }
+    .number-small { fill: rgba(255, 255, 255, 0.75); font-family: 'JetBrains Mono', monospace; font-size: 8px; font-weight: 500; }
+    .number-tiny { fill: rgba(255, 255, 255, 0.55); font-family: 'JetBrains Mono', monospace; font-size: 6.5px; }
+    .sea-label { fill: rgba(56, 189, 248, 0.55); font-family: 'Vazirmatn', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1px; }
+    .city-dot { fill: #fbbf24; }
+    .city-dot.major { fill: #f59e0b; }
+    .city-label { fill: rgba(251, 191, 36, 0.95); font-family: 'Vazirmatn', sans-serif; font-size: 9.5px; font-weight: 600; }
+    .city-label.gray { fill: rgba(148, 163, 184, 0.75); font-weight: 500; }
+  </style>
+
+  <rect width="1000" height="800" fill="url(#dotPattern)" opacity="0.5"/>
+
+  <!-- ================ نقشه ایران (بر اساس مختصات جغرافیایی واقعی) ================ -->
+  <!-- مسیر مرز ایران از شمال غرب، در جهت عقربه‌های ساعت -->
+  <path class="iran-outline" d="
+    M 121 78
+    L 167 101
+    L 220 110
+    L 280 118
+    L 306 125
+    L 311 125
+    C 320 140, 328 155, 332 167
+    C 350 180, 365 185, 374 190
+    C 410 195, 450 200, 479 199
+    C 500 200, 515 202, 521 204
+    L 563 190
+    L 626 195
+    L 689 199
+    L 750 207
+    L 795 215
+    L 820 230
+    C 840 250, 855 280, 860 315
+    C 865 360, 868 410, 865 455
+    C 860 500, 850 545, 835 585
+    C 815 625, 790 660, 758 690
+    C 720 720, 678 742, 635 758
+    C 590 770, 545 775, 500 772
+    C 455 770, 410 762, 370 748
+    C 330 732, 295 712, 268 688
+    C 242 660, 222 628, 208 595
+    C 192 555, 178 512, 168 468
+    C 158 422, 150 375, 144 328
+    C 138 282, 134 235, 132 190
+    C 130 152, 128 120, 121 78 Z
+  "/>
+
+  <!-- دریای خزر (انحنی در شمال - به سمت پایین) -->
+  <path d="
+    M 220 110
+    L 280 118
+    L 306 125
+    L 311 125
+    C 320 140, 328 155, 332 167
+    C 350 180, 365 185, 374 190
+    C 410 195, 450 200, 479 199
+    C 500 200, 515 202, 521 204
+  " fill="rgba(56, 189, 248, 0.22)" stroke="rgba(56, 189, 248, 0.5)" stroke-width="1.2"/>
+  <text x="400" y="155" text-anchor="middle" class="sea-label">دریای خزر</text>
+
+  <!-- خلیج فارس (انحنی در جنوب - به سمت بالا) -->
+  <path d="
+    M 370 748
+    C 410 762, 455 770, 500 772
+    C 525 775, 540 765, 535 752
+    C 490 745, 440 735, 395 725
+    C 378 722, 368 728, 370 748 Z
+  " fill="rgba(56, 189, 248, 0.22)" stroke="rgba(56, 189, 248, 0.5)" stroke-width="1.2"/>
+  <text x="460" y="755" text-anchor="middle" class="sea-label">خلیج فارس</text>
+
+  <!-- دریای عمان (جنوب شرق) -->
+  <text x="810" y="620" text-anchor="middle" class="sea-label" transform="rotate(45 810 620)">دریای عمان</text>
+
+  <!-- ================ خطوط استان‌ها (ساده‌شده) ================ -->
+  <g class="province-line">
+    <!-- شمال -->
+    <path d="M 340 200 C 360 230, 375 260, 385 290"/>
+    <path d="M 395 220 C 415 250, 428 280, 435 310"/>
+    <path d="M 460 220 C 480 250, 495 280, 505 310"/>
+    <path d="M 530 215 C 548 245, 560 275, 570 305"/>
+    <path d="M 600 205 C 615 235, 625 265, 632 295"/>
+    <!-- مرکز -->
+    <path d="M 385 320 C 400 350, 410 380, 420 410"/>
+    <path d="M 435 330 C 450 360, 460 390, 470 420"/>
+    <path d="M 505 340 C 520 370, 530 400, 540 430"/>
+    <path d="M 570 340 C 585 370, 595 400, 605 430"/>
+    <!-- جنوب -->
+    <path d="M 420 440 C 440 470, 455 500, 470 530"/>
+    <path d="M 470 450 C 490 480, 505 510, 520 540"/>
+    <path d="M 540 460 C 560 490, 575 520, 590 550"/>
+    <path d="M 605 460 C 625 490, 640 520, 655 550"/>
+    <!-- غرب -->
+    <path d="M 200 280 C 220 310, 235 340, 245 370"/>
+    <path d="M 250 320 C 270 350, 285 380, 295 410"/>
+    <path d="M 300 360 C 320 390, 335 420, 345 450"/>
+    <path d="M 175 380 C 195 410, 210 440, 220 470"/>
+  </g>
+
+  <!-- ================ خراسان بزرگ (یکپارچه در شمال شرق) ================ -->
+  <g class="khorasan-group">
+    <path class="khorasan-region" d="
+      M 620 195
+      C 660 188, 700 188, 735 192
+      C 770 196, 800 205, 825 220
+      C 845 235, 858 258, 862 285
+      C 866 320, 868 360, 865 400
+      C 862 440, 855 478, 842 510
+      C 825 540, 800 560, 770 570
+      C 730 580, 690 582, 650 575
+      C 615 568, 585 555, 565 535
+      C 548 515, 540 488, 538 458
+      C 536 425, 540 390, 548 355
+      C 558 320, 572 285, 590 250
+      C 602 225, 612 205, 620 195 Z
+    "/>
+  </g>
+
+  <!-- خطوط جداکننده سه استان خراسان -->
+  <g stroke="rgba(254, 226, 226, 0.4)" stroke-width="0.9" stroke-dasharray="4 3" fill="none">
+    <path d="M 565 335 C 605 345, 650 352, 695 355 C 745 357, 795 355, 835 352"/>
+    <path d="M 550 480 C 595 495, 645 502, 695 502 C 745 502, 795 495, 830 485"/>
+  </g>
+
+  <!-- ================ شهرهای مهم ================ -->
+  <g class="cities">
+    <!-- تهران -->
+    <circle cx="455" cy="245" r="3.5" class="city-dot major"/>
+    <text x="461" y="249" class="city-label">تهران</text>
+
+    <!-- مشهد -->
+    <circle cx="720" cy="430" r="5" class="city-dot major"/>
+    <circle cx="720" cy="430" r="9" fill="none" stroke="rgba(251, 191, 36, 0.4)" stroke-width="1"/>
+    <circle cx="720" cy="430" r="13" fill="none" stroke="rgba(251, 191, 36, 0.2)" stroke-width="0.5"/>
+    <text x="730" y="433" class="city-label" style="font-size: 11.5px; font-weight: 700;">مشهد</text>
+
+    <!-- بجنورد -->
+    <circle cx="715" cy="310" r="3" fill="#fde68a"/>
+    <text x="723" y="313" class="city-label" style="fill: #fde68a; font-size: 9px;">بجنورد</text>
+
+    <!-- بیرجند -->
+    <circle cx="725" cy="545" r="3" fill="#fde68a"/>
+    <text x="733" y="548" class="city-label" style="fill: #fde68a; font-size: 9px;">بیرجند</text>
+
+    <!-- اصفهان -->
+    <circle cx="485" cy="460" r="3" class="city-dot"/>
+    <text x="491" y="463" class="city-label">اصفهان</text>
+
+    <!-- شیراز -->
+    <circle cx="525" cy="630" r="3" class="city-dot"/>
+    <text x="531" y="633" class="city-label">شیراز</text>
+
+    <!-- تبریز -->
+    <circle cx="285" cy="220" r="2.5" class="city-dot"/>
+    <text x="260" y="223" class="city-label gray">تبریز</text>
+
+    <!-- اهواز -->
+    <circle cx="380" cy="635" r="2.5" class="city-dot"/>
+    <text x="355" y="638" class="city-label gray">اهواز</text>
+
+    <!-- بندرعباس -->
+    <circle cx="700" cy="715" r="2.5" class="city-dot"/>
+    <text x="706" y="718" class="city-label gray">بندرعباس</text>
+  </g>
+
+  <!-- ================ درخت سپیدار (رشد کرده از مشهد) ================ -->
+  <g class="sepidar-tree" transform="translate(720, 430)">
+    <!-- سایه زمین -->
+    <ellipse cx="0" cy="6" rx="140" ry="18" fill="rgba(0,0,0,0.5)" opacity="0.4"/>
+
+    <!-- تنه اصلی -->
+    <path d="
+      M -12 5
+      C -10 -30, -8 -70, -5 -110
+      C -3 -145, -1 -175, 0 -200
+      C 1 -175, 3 -145, 5 -110
+      C 8 -70, 10 -30, 12 5
+      C 8 8, -8 8, -12 5 Z
+    " class="tree-trunk"/>
+
+    <!-- ریشه‌های کوچک -->
+    <path d="M -12 5 C -22 10, -32 12, -38 11" stroke="#2d1810" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M 12 5 C 22 10, 32 12, 38 11" stroke="#2d1810" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M 0 8 C -6 15, -10 20, -12 25" stroke="#2d1810" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M 0 8 C 6 15, 10 20, 12 25" stroke="#2d1810" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+    <!-- شاخه‌های اصلی -->
+    <g class="branches">
+      <path d="M -6 -55 C -32 -72, -65 -78, -95 -68" class="tree-branch"/>
+      <path d="M -95 -68 C -118 -62, -135 -52, -142 -40" class="tree-branch thin"/>
+      <path d="M -95 -68 C -108 -78, -118 -90, -120 -100" class="tree-branch thin"/>
+
+      <path d="M 6 -60 C 32 -75, 65 -80, 95 -70" class="tree-branch"/>
+      <path d="M 95 -70 C 118 -64, 135 -54, 142 -42" class="tree-branch thin"/>
+      <path d="M 95 -70 C 108 -80, 118 -92, 120 -102" class="tree-branch thin"/>
+
+      <path d="M -4 -120 C -32 -145, -70 -155, -105 -145" class="tree-branch"/>
+      <path d="M -105 -145 C -128 -138, -145 -125, -150 -110" class="tree-branch thin"/>
+
+      <path d="M 4 -125 C 32 -150, 70 -160, 105 -150" class="tree-branch"/>
+      <path d="M 105 -150 C 128 -143, 145 -130, 150 -115" class="tree-branch thin"/>
+
+      <path d="M -2 -155 C -20 -185, -42 -210, -65 -225" class="tree-branch thin"/>
+      <path d="M 2 -160 C 20 -190, 42 -215, 65 -230" class="tree-branch thin"/>
+      <path d="M 0 -180 C -10 -210, -12 -240, -10 -265" class="tree-branch thin"/>
+      <path d="M 0 -180 C 10 -210, 12 -240, 10 -265" class="tree-branch thin"/>
+    </g>
+
+    <!-- خوشه‌های برگ -->
+    <g class="leaves">
+      <ellipse cx="0" cy="-200" rx="60" ry="45" class="leaf"/>
+      <ellipse cx="-22" cy="-190" rx="45" ry="38" class="leaf"/>
+      <ellipse cx="22" cy="-195" rx="45" ry="38" class="leaf"/>
+      <ellipse cx="-8" cy="-225" rx="40" ry="32" class="leaf"/>
+      <ellipse cx="12" cy="-220" rx="38" ry="30" class="leaf"/>
+
+      <ellipse cx="-75" cy="-160" rx="48" ry="40" class="leaf"/>
+      <ellipse cx="-100" cy="-135" rx="40" ry="34" class="leaf"/>
+      <ellipse cx="-120" cy="-115" rx="34" ry="30" class="leaf"/>
+      <ellipse cx="-138" cy="-105" rx="28" ry="24" class="leaf"/>
+      <ellipse cx="-65" cy="-180" rx="34" ry="28" class="leaf"/>
+
+      <ellipse cx="75" cy="-165" rx="48" ry="40" class="leaf"/>
+      <ellipse cx="100" cy="-140" rx="40" ry="34" class="leaf"/>
+      <ellipse cx="120" cy="-120" rx="34" ry="30" class="leaf"/>
+      <ellipse cx="138" cy="-110" rx="28" ry="24" class="leaf"/>
+      <ellipse cx="65" cy="-185" rx="34" ry="28" class="leaf"/>
+
+      <ellipse cx="-85" cy="-72" rx="38" ry="32" class="leaf"/>
+      <ellipse cx="-115" cy="-55" rx="30" ry="26" class="leaf"/>
+      <ellipse cx="-135" cy="-40" rx="24" ry="20" class="leaf"/>
+
+      <ellipse cx="85" cy="-77" rx="38" ry="32" class="leaf"/>
+      <ellipse cx="115" cy="-60" rx="30" ry="26" class="leaf"/>
+      <ellipse cx="135" cy="-45" rx="24" ry="20" class="leaf"/>
+
+      <ellipse cx="-55" cy="-230" rx="32" ry="26" class="leaf"/>
+      <ellipse cx="55" cy="-235" rx="32" ry="26" class="leaf"/>
+      <ellipse cx="-32" cy="-258" rx="26" ry="22" class="leaf"/>
+      <ellipse cx="32" cy="-263" rx="26" ry="22" class="leaf"/>
+      <ellipse cx="0" cy="-275" rx="24" ry="20" class="leaf"/>
+    </g>
+
+    <!-- برگ‌های تکی -->
+    <g class="leaf-details" fill="#bef264" opacity="0.75">
+      <circle cx="-38" cy="-180" r="3.5"/>
+      <circle cx="38" cy="-185" r="3.5"/>
+      <circle cx="-90" cy="-155" r="3"/>
+      <circle cx="90" cy="-160" r="3"/>
+      <circle cx="-58" cy="-200" r="2.8"/>
+      <circle cx="58" cy="-205" r="2.8"/>
+      <circle cx="-122" cy="-125" r="2.8"/>
+      <circle cx="122" cy="-130" r="2.8"/>
+      <circle cx="-68" cy="-90" r="2.5"/>
+      <circle cx="68" cy="-95" r="2.5"/>
+      <circle cx="-105" cy="-72" r="2.5"/>
+      <circle cx="105" cy="-78" r="2.5"/>
+      <circle cx="-18" cy="-245" r="2.5"/>
+      <circle cx="18" cy="-250" r="2.5"/>
+      <circle cx="-25" cy="-270" r="2"/>
+      <circle cx="25" cy="-275" r="2"/>
+    </g>
+
+    <!-- اعداد سفید اطراف برگ‌ها -->
+    <g class="numbers" filter="url(#softShadow)">
+      <text x="-85" y="-175" text-anchor="middle" class="number">۰۱</text>
+      <text x="85" y="-180" text-anchor="middle" class="number">۱۴۰۳</text>
+      <text x="0" y="-280" text-anchor="middle" class="number">۲۴/۷</text>
+      <text x="-125" y="-130" text-anchor="middle" class="number">۹۹٪</text>
+      <text x="125" y="-135" text-anchor="middle" class="number">+۱۰K</text>
+      <text x="-145" y="-105" text-anchor="middle" class="number">۳۶۵</text>
+      <text x="145" y="-110" text-anchor="middle" class="number">۱۲</text>
+      <text x="-55" y="-235" text-anchor="middle" class="number">۰۲</text>
+      <text x="55" y="-240" text-anchor="middle" class="number">۰۳</text>
+
+      <text x="-105" y="-85" text-anchor="middle" class="number-small">۰۷</text>
+      <text x="105" y="-90" text-anchor="middle" class="number-small">۰۸</text>
+      <text x="-130" y="-58" text-anchor="middle" class="number-small">۱۹</text>
+      <text x="130" y="-63" text-anchor="middle" class="number-small">۲۱</text>
+      <text x="-28" y="-215" text-anchor="middle" class="number-small">+۵۰۰</text>
+      <text x="28" y="-220" text-anchor="middle" class="number-small">۱M</text>
+      <text x="-70" y="-145" text-anchor="middle" class="number-small">۱۴۰۲</text>
+      <text x="70" y="-150" text-anchor="middle" class="number-small">۱۴۰۴</text>
+      <text x="0" y="-195" text-anchor="middle" class="number-small">∞</text>
+      <text x="-32" y="-260" text-anchor="middle" class="number-small">★</text>
+      <text x="32" y="-265" text-anchor="middle" class="number-small">★</text>
+      <text x="-100" y="-180" text-anchor="middle" class="number-small">۰۹</text>
+      <text x="100" y="-185" text-anchor="middle" class="number-small">۱۰</text>
+
+      <text x="-48" y="-160" text-anchor="middle" class="number-tiny">۲۸</text>
+      <text x="48" y="-165" text-anchor="middle" class="number-tiny">۴۵</text>
+      <text x="-42" y="-275" text-anchor="middle" class="number-tiny">۱۱</text>
+      <text x="42" y="-280" text-anchor="middle" class="number-tiny">۱۳</text>
+      <text x="-115" y="-150" text-anchor="middle" class="number-tiny">۲۹</text>
+      <text x="115" y="-155" text-anchor="middle" class="number-tiny">۳۱</text>
+      <text x="-75" y="-100" text-anchor="middle" class="number-tiny">۱۷</text>
+      <text x="75" y="-105" text-anchor="middle" class="number-tiny">۲۳</text>
+      <text x="-120" y="-75" text-anchor="middle" class="number-tiny">۴۱</text>
+      <text x="120" y="-80" text-anchor="middle" class="number-tiny">۵۲</text>
+      <text x="-18" y="-265" text-anchor="middle" class="number-tiny">۰۴</text>
+      <text x="18" y="-270" text-anchor="middle" class="number-tiny">۰۵</text>
+      <text x="-95" y="-110" text-anchor="middle" class="number-tiny">۰۶</text>
+      <text x="95" y="-115" text-anchor="middle" class="number-tiny">۱۵</text>
+      <text x="-65" y="-200" text-anchor="middle" class="number-tiny">۲۴</text>
+      <text x="65" y="-205" text-anchor="middle" class="number-tiny">۲۶</text>
+    </g>
+  </g>
+
+  <!-- برچسب خراسان بزرگ -->
+  <g class="khorasan-label">
+    <rect x="645" y="640" width="150" height="50" rx="12" fill="rgba(15, 21, 37, 0.9)" stroke="rgba(251, 191, 36, 0.4)" stroke-width="1"/>
+    <text x="720" y="662" text-anchor="middle" fill="white" font-family="Vazirmatn" font-size="15" font-weight="800" letter-spacing="1.5">خراسان بزرگ</text>
+    <text x="720" y="680" text-anchor="middle" fill="rgba(254, 226, 226, 0.85)" font-family="Vazirmatn" font-size="9" font-weight="500">زادگاه سپیدار سیستم</text>
+  </g>
+</svg>
