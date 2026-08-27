@@ -2,6 +2,7 @@ import { site } from "@/lib/site";
 import { formatPrice } from "@/lib/format";
 import { isBuyable, type Pricing } from "@/lib/pricing";
 import { ButtonLink } from "@/components/ui/Button";
+import { WhatsAppButton } from "./WhatsAppButton";
 
 /**
  * کارت قیمت و خرید در صفحه محصول.
@@ -11,8 +12,19 @@ import { ButtonLink } from "@/components/ui/Button";
  *   ۲. قیمت دارد ولی خرید غیرفعال → مبلغ + دکمه مشاوره
  *   ۳. قیمت ندارد → «استعلام قیمت» + دکمه مشاوره
  * حالت سوم پیش‌فرض است، پس تا وقتی مدیر قیمتی وارد نکرده هم صفحه سالم است.
+ *
+ * دکمه واتساپ در هر سه حالت هست — سریع‌ترین مسیر تبدیل است و نباید
+ * پشت شرط قیمت پنهان شود.
  */
-export function PriceBox({ slug, pricing }: { slug: string; pricing: Pricing | null }) {
+export function PriceBox({
+  slug,
+  productName,
+  pricing,
+}: {
+  slug: string;
+  productName: string;
+  pricing: Pricing | null;
+}) {
   // تصمیم خرید فقط به کلید «خرید آنلاین» در پنل مدیریت وابسته است.
   // عمداً وضعیت درگاه (متغیر محیطی) را اینجا نمی‌خوانیم: این صفحه کش می‌شود و
   // اگر درگاه بعداً فعال شود، صفحه تا زمان بازتولید حالت قدیمی را نشان می‌دهد.
@@ -37,18 +49,28 @@ export function PriceBox({ slug, pricing }: { slug: string; pricing: Pricing | n
       </p>
 
       <div className="mt-6 space-y-3">
+        <WhatsAppButton
+          message={`سلام، درباره «${productName}» سؤال داشتم.`}
+          label="سؤال سریع در واتساپ"
+        />
+
         {buyable ? (
           <>
             <ButtonLink href={`/checkout/${slug}`} size="lg" className="w-full">
               خرید و پرداخت
             </ButtonLink>
-            <ButtonLink href="/consultation" variant="secondary" size="lg" className="w-full">
+            <ButtonLink
+              href={`/consultation?product=${slug}`}
+              variant="secondary"
+              size="lg"
+              className="w-full"
+            >
               مشاوره قبل از خرید
             </ButtonLink>
           </>
         ) : (
           <>
-            <ButtonLink href="/consultation" size="lg" className="w-full">
+            <ButtonLink href={`/consultation?product=${slug}`} size="lg" className="w-full">
               درخواست مشاوره و قیمت
             </ButtonLink>
             <a

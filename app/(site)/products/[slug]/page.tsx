@@ -121,7 +121,7 @@ export default async function ProductPage({ params }: Props) {
 
           {/* کارت خرید — چسبان در دسکتاپ */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <PriceBox slug={product.slug} pricing={pricing} />
+            <PriceBox slug={product.slug} productName={product.name} pricing={pricing} />
           </aside>
         </div>
       </Container>

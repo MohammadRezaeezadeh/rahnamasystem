@@ -10,7 +10,9 @@ import { JsonLd } from "@/components/site/JsonLd";
 import { faqSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: `${site.name} | ${site.tagline}`,
+  // absolute لازم است، وگرنه قالب عنوان در layout دوباره نام سایت را
+  // به انتها اضافه می‌کند و عنوان تکراری می‌شود
+  title: { absolute: `${site.name} | ${site.tagline}` },
   description: site.description,
   alternates: { canonical: "/" },
 };

@@ -78,3 +78,26 @@ CREATE TABLE IF NOT EXISTS leads (
 );
 
 CREATE INDEX IF NOT EXISTS leads_status_idx ON leads (status, created_at DESC);
+
+-- =============================================================
+-- فاز ۲ — مشاوره و رزرو تماس
+-- =============================================================
+
+-- ستون‌های جدید روی جدول موجود leads (اجرای چندباره بی‌خطر است)
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS public_id      TEXT;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS product_slug   TEXT;
+-- زمان تماسی که کاربر رزرو کرده؛ NULL یعنی «هر زمانی»
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS preferred_slot TIMESTAMPTZ;
+-- آیا اعلان ایمیلی برای این سرنخ فرستاده شد؟ اگر false، تیم فروش باید
+-- بداند که فقط در پنل دیده می‌شود و ایمیلی نرسیده است.
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS notified       BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS updated_at     TIMESTAMPTZ NOT NULL DEFAULT now();
+
+-- یک بازه زمانی نباید دوبار رزرو شود.
+-- ایندکس جزئی است: رزروهای لغوشده جا را اشغال نمی‌کنند.
+CREATE UNIQUE INDEX IF NOT EXISTS leads_slot_unique
+  ON leads (preferred_slot)
+  WHERE preferred_slot IS NOT NULL AND status <> 'canceled';
+
+CREATE INDEX IF NOT EXISTS leads_slot_idx ON leads (preferred_slot)
+  WHERE preferred_slot IS NOT NULL;

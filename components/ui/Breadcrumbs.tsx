@@ -22,7 +22,7 @@ export function Breadcrumbs({ trail }: { trail: Crumb[] }) {
                   {last ? (
                     <span className="font-semibold text-ink-700" aria-current="page">{crumb.name}</span>
                   ) : (
-                    <Link href={crumb.href} className="transition-colors hover:text-brand-700">
+                    <Link href={crumb.href} className="inline-flex min-h-9 items-center transition-colors hover:text-brand-700">
                       {crumb.name}
                     </Link>
                   )}
