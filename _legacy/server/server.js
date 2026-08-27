@@ -12,8 +12,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the parent directory
-app.use(express.static(path.join(__dirname, '..')));
+// Serve static files from current directory
+app.use(express.static(__dirname));
 
 // API Routes
 app.use('/api/products', require('./routes/products'));
@@ -35,9 +35,25 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve index.html for all other routes
+// Serve index.html for all other routes (if exists)
+const indexPath = path.join(__dirname, 'index.html');
+const fs = require('fs');
+
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'index.html'));
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.json({
+      message: 'Rahnama System API',
+      version: '1.0.0',
+      endpoints: {
+        health: '/api/health',
+        products: '/api/products',
+        contact: '/api/contact',
+        blog: '/api/blog'
+      }
+    });
+  }
 });
 
 // Error handling middleware

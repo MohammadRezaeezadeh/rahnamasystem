@@ -1,23 +1,34 @@
-# Dependencies
+# وابستگی‌ها
 node_modules/
-server/node_modules/
+.pnp
+.pnp.*
 
-# Environment variables
+# Next.js
+.next/
+out/
+build/
+dist/
+next-env.d.ts
+
+# متغیرهای محیطی
 .env
-server/.env
+.env.local
+.env.*.local
 
-# Logs
+# لاگ‌ها
 *.log
 npm-debug.log*
+yarn-error.log*
 
-# OS files
+# سیستم‌عامل
 .DS_Store
 Thumbs.db
 
-# IDE
+# ادیتور
 .vscode/
 .idea/
 
-# Build
-dist/
-build/
+# تست و پوشش
+coverage/
+.vercel
+*.tsbuildinfo

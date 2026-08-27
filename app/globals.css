@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+/* ============================================================
+   سیستم طراحی رهنما سیستم شرق
+   روشن، پرکنتراست، سبز-فیروزه‌ای (هم‌خانواده با برند سپیدار)
+   عمداً از آبی/نارنجی رایج سایت‌های رقیب فاصله گرفته شده.
+   ============================================================ */
+
+@theme {
+  /* --- رنگ برند: هم‌خانواده با سبز لوگو --- */
+  /* brand-400 و brand-600 دقیقاً همان دو سبز نشان هستند */
+  --color-brand-50: #f4fbe8;
+  --color-brand-100: #e6f6cc;
+  --color-brand-200: #cdec9d;
+  --color-brand-300: #aede63;
+  --color-brand-400: #85dc12;
+  --color-brand-500: #6fbc0e;
+  --color-brand-600: #56a80f;
+  /* brand-700 رنگ دکمه‌ها و لینک‌هاست — کنتراست متن سفید روی آن ۴.۹:۱ (استاندارد AA) */
+  --color-brand-700: #43800c;
+  --color-brand-800: #36660c;
+  --color-brand-900: #2c520e;
+  --color-brand-950: #1d380a;
+
+  /* --- خنثی / متن --- */
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #f1f5f9;
+  --color-ink-200: #e2e8f0;
+  --color-ink-300: #cbd5e1;
+  --color-ink-400: #94a3b8;
+  --color-ink-500: #64748b;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-800: #1e293b;
+  --color-ink-900: #0f172a;
+
+  /* --- تأکید (قیمت، تخفیف، نشان‌ها) --- */
+  --color-accent-100: #fef3c7;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+
+  /* --- فونت --- */
+  --font-sans: var(--font-vazirmatn), ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+
+  /* --- شعاع گوشه --- */
+  --radius-card: 1rem;
+
+  /* --- سایه‌های نرم --- */
+  --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 16px rgb(15 23 42 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(15 23 42 / 0.05), 0 12px 32px rgb(15 23 42 / 0.10);
+}
+
+/* ============================================================
+   پایه
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+  /* جبران ارتفاع هدر چسبان هنگام پرش به لنگر */
+  scroll-padding-top: 5.5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-ink-50);
+  color: var(--color-ink-800);
+  font-family: var(--font-sans);
+  /* فونت فارسی با line-height پیش‌فرض تنگ به نظر می‌رسد */
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.5;
+  font-weight: 700;
+  color: var(--color-ink-900);
+  letter-spacing: 0;
+}
+
+/* وزیرمتن با letter-spacing منفی به هم می‌چسبد؛ صفر بماند */
+* {
+  letter-spacing: 0 !important;
+}
+
+/* ============================================================
+   کمکی‌های دوجهته
+   ============================================================ */
+
+/* هر محتوای لاتین (تلفن، ایمیل، کد) که داخل متن فارسی می‌آید */
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+/* عدد با عرض ثابت - جلوی پرش قیمت هنگام تغییر را می‌گیرد */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   دسترسی‌پذیری
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* پرش به محتوا - برای کاربران کیبورد و اسکرین‌ریدر */
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: -100px;
+  z-index: 100;
+  background: var(--color-brand-700);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
