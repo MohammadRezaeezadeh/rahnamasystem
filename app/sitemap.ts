@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
 import { productsSorted } from "@/lib/products";
 import { publishedPages } from "@/lib/landing";
+import { publishedPosts } from "@/lib/blog";
+import { CATEGORIES } from "@/lib/blog-content";
 
 /**
  * نقشه سایت خودکار.
@@ -45,5 +47,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: page.kind === "industry" ? 0.8 : 0.7,
   }));
 
-  return [...staticPages, ...productPages, ...landingPages];
+  const categoryPages: MetadataRoute.Sitemap = CATEGORIES.map((category) => ({
+    url: `${site.url}/blog/category/${category.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.5,
+  }));
+
+  const posts = await publishedPosts();
+  const postPages: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${site.url}/blog/${post.slug}`,
+    lastModified: new Date(post.updated_at),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...productPages, ...landingPages, ...categoryPages, ...postPages];
 }

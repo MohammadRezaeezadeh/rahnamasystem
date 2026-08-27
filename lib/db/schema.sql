@@ -143,3 +143,37 @@ CREATE TABLE IF NOT EXISTS landing_pages (
 );
 
 CREATE INDEX IF NOT EXISTS landing_kind_idx ON landing_pages (kind, published);
+
+-- =============================================================
+-- فاز ۴ — وبلاگ
+-- =============================================================
+
+-- جدول قدیمی blog_posts از نسخه اول پروژه ساختار متفاوتی داشت.
+-- این نسخه با نیازهای فاز ۴ نوشته شده: دسته‌بندی، لینک داخلی اجباری
+-- به محصول، و انتشار بدون دیپلوی.
+CREATE TABLE IF NOT EXISTS posts (
+  slug              TEXT PRIMARY KEY,
+  title             TEXT NOT NULL,
+  -- توضیح متا برای گوگل
+  description       TEXT NOT NULL,
+  -- خلاصه‌ای که در کارت فهرست وبلاگ نمایش داده می‌شود
+  excerpt           TEXT NOT NULL,
+  -- یکی از دسته‌های تعریف‌شده در lib/blog-content.ts
+  category          TEXT NOT NULL,
+  -- متن مقاله با همان قالب ساده لندینگ‌ها: ### برای عنوان، - برای فهرست
+  body              TEXT NOT NULL,
+  -- حداقل یک محصول لازم است: هر مقاله باید لینک داخلی بدهد
+  related_products  TEXT[] NOT NULL DEFAULT '{}',
+  -- دقیقه مطالعه، از روی تعداد کلمه محاسبه و ذخیره می‌شود
+  reading_minutes   INTEGER NOT NULL DEFAULT 1,
+  published         BOOLEAN NOT NULL DEFAULT false,
+  -- تاریخ انتشار جدا از created_at است تا ترتیب وبلاگ دست مدیر باشد
+  published_at      TIMESTAMPTZ,
+  created_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at        TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS posts_published_idx
+  ON posts (published, published_at DESC);
+CREATE INDEX IF NOT EXISTS posts_category_idx
+  ON posts (category, published, published_at DESC);

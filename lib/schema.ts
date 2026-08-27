@@ -133,3 +133,30 @@ export function breadcrumbSchema(trail: { name: string; href: string }[]) {
     })),
   };
 }
+
+/**
+ * BlogPosting — صفحه هر مقاله.
+ * ناشر همان کسب‌وکار است، پس به ORG_ID ارجاع می‌دهیم تا گوگل مقاله را
+ * به همان LocalBusiness وصل کند.
+ */
+export function articleSchema(post: {
+  slug: string;
+  title: string;
+  description: string;
+  published_at: string | null;
+  updated_at: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    inLanguage: "fa-IR",
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${site.url}/blog/${post.slug}` },
+    url: `${site.url}/blog/${post.slug}`,
+    datePublished: post.published_at ?? undefined,
+    dateModified: post.updated_at,
+    author: { "@id": ORG_ID },
+    publisher: { "@id": ORG_ID },
+  };
+}

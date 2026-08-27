@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 const adminNav = [
   { href: "/admin", label: "خلاصه" },
   { href: "/admin/prices", label: "قیمت‌ها" },
+  { href: "/admin/blog", label: "مقالات" },
   { href: "/admin/landing", label: "لندینگ‌ها" },
   { href: "/admin/leads", label: "سرنخ‌ها" },
   { href: "/admin/orders", label: "سفارش‌ها" },

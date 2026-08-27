@@ -56,8 +56,31 @@ export function LandingForm({
 }) {
   const [state, action] = useActionState<LandingFormState, FormData>(saveLandingAction, {});
   const [kind, setKind] = useState(page?.kind ?? "industry");
-  const [slug, setSlug] = useState(page?.slug ?? "");
   const [selected, setSelected] = useState<string[]>(page?.related_products ?? []);
+  const [published, setPublished] = useState(page?.published ?? false);
+
+  /**
+   * همه فیلدها کنترل‌شده‌اند، نه defaultValue.
+   * React نسخه ۱۹ فرم دارای prop به نام action را بعد از هر ارسال پاک
+   * می‌کند — حتی وقتی اکشن خطا برگردانده. با فیلد کنترل‌نشده، یک خطای
+   * اعتبارسنجی ساده کل محتوای نوشته‌شده را از بین می‌برد.
+   */
+  const [form, setForm] = useState({
+    slug: page?.slug ?? "",
+    title: page?.title ?? "",
+    description: page?.description ?? "",
+    h1: page?.h1 ?? "",
+    intro: page?.intro ?? "",
+    industry: page?.industry ?? "",
+    area: page?.area ?? "",
+    competitor: page?.competitor ?? "",
+    sections: initialSections,
+    comparison_rows: initialComparison,
+    faqs: initialFaqs,
+  });
+  const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
+    setForm((prev) => ({ ...prev, [k]: v }));
+  const slug = form.slug;
 
   const toggleProduct = (s: string) =>
     setSelected((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
@@ -111,8 +134,8 @@ export function LandingForm({
             name="slug"
             dir="ltr"
             required
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
+            value={form.slug}
+            onChange={(e) => set("slug", e.target.value)}
             placeholder="hesabdari-tolidi-mashhad"
             className={`${input} font-mono`}
             readOnly={Boolean(page)}
@@ -129,7 +152,8 @@ export function LandingForm({
           <input
             name="title"
             required
-            defaultValue={page?.title ?? ""}
+            value={form.title}
+            onChange={(e) => set("title", e.target.value)}
             placeholder="نرم‌افزار حسابداری تولیدی در شهرک صنعتی توس مشهد"
             className={input}
           />
@@ -140,7 +164,8 @@ export function LandingForm({
             name="description"
             required
             rows={2}
-            defaultValue={page?.description ?? ""}
+            value={form.description}
+            onChange={(e) => set("description", e.target.value)}
             className="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-sm leading-loose outline-none focus:border-brand-500"
           />
         </Field>
@@ -154,7 +179,8 @@ export function LandingForm({
           <input
             name="h1"
             required
-            defaultValue={page?.h1 ?? ""}
+            value={form.h1}
+            onChange={(e) => set("h1", e.target.value)}
             placeholder="حسابداری واحدهای تولیدی شهرک صنعتی توس"
             className={input}
           />
@@ -164,7 +190,8 @@ export function LandingForm({
           <textarea
             name="intro"
             rows={3}
-            defaultValue={page?.intro ?? ""}
+            value={form.intro}
+            onChange={(e) => set("intro", e.target.value)}
             className="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-sm leading-loose outline-none focus:border-brand-500"
           />
         </Field>
@@ -172,17 +199,18 @@ export function LandingForm({
         {kind === "industry" ? (
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="صنف" hint="مثلاً: حسابداری تولیدی">
-              <input name="industry" defaultValue={page?.industry ?? ""} className={input} />
+              <input name="industry" value={form.industry} onChange={(e) => set("industry", e.target.value)} className={input} />
             </Field>
             <Field label="منطقه" hint="مثلاً: شهرک صنعتی توس مشهد">
-              <input name="area" defaultValue={page?.area ?? ""} className={input} />
+              <input name="area" value={form.area} onChange={(e) => set("area", e.target.value)} className={input} />
             </Field>
           </div>
         ) : (
           <Field label="نام نرم‌افزار رقیب" hint="مثلاً: هلو یا پارمیس">
             <input
               name="competitor"
-              defaultValue={page?.competitor ?? ""}
+              value={form.competitor}
+              onChange={(e) => set("competitor", e.target.value)}
               className={input}
               required={kind === "comparison"}
             />
@@ -196,7 +224,8 @@ export function LandingForm({
           <textarea
             name="sections"
             rows={12}
-            defaultValue={initialSections}
+            value={form.sections}
+            onChange={(e) => set("sections", e.target.value)}
             placeholder={"### چرا واحدهای تولیدی به نسخه تخصصی نیاز دارند\nبهای تمام‌شده بدون فرمول ساخت…\n\n### راه‌اندازی در محل\nبرای کسب‌وکارهای شهرک صنعتی توس…"}
             className={area}
           />
@@ -210,7 +239,8 @@ export function LandingForm({
             <textarea
               name="comparison_rows"
               rows={8}
-              defaultValue={initialComparison}
+              value={form.comparison_rows}
+              onChange={(e) => set("comparison_rows", e.target.value)}
               placeholder={"بهای تمام‌شده تولید | دارد | ندارد\nپشتیبانی محلی مشهد | حضوری | تلفنی"}
               className={area}
             />
@@ -221,7 +251,8 @@ export function LandingForm({
           <textarea
             name="faqs"
             rows={6}
-            defaultValue={initialFaqs}
+            value={form.faqs}
+            onChange={(e) => set("faqs", e.target.value)}
             placeholder={"قیمت سپیدار تولیدی چقدر است؟ | به تعداد کاربر بستگی دارد…"}
             className={area}
           />
@@ -259,7 +290,8 @@ export function LandingForm({
           <input
             type="checkbox"
             name="published"
-            defaultChecked={page?.published ?? false}
+            checked={published}
+            onChange={(e) => setPublished(e.target.checked)}
             className="size-4 accent-brand-700"
           />
           منتشر شود
