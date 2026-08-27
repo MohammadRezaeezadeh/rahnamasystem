@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
 import { currentUser } from "@/lib/auth";
-import { recentLeads, upcomingBookings } from "@/lib/leads";
+import { recentLeads, upcomingBookings, hotLeads } from "@/lib/leads";
 import { isMailConfigured } from "@/lib/mail";
-import { formatDateFa } from "@/lib/format";
+import { formatDateFa, formatNumber } from "@/lib/format";
+import { scoreLabel } from "@/lib/tracking";
 import { formatSlotFull } from "@/lib/availability";
 import { updateLeadStatusAction } from "./actions";
 
@@ -18,7 +19,11 @@ const STATUS = [
 export default async function LeadsPage() {
   if (!(await currentUser())) redirect("/admin/login");
 
-  const [leads, bookings] = await Promise.all([recentLeads(100), upcomingBookings()]);
+  const [leads, bookings, hot] = await Promise.all([
+    recentLeads(100),
+    upcomingBookings(),
+    hotLeads(),
+  ]);
   const mailReady = isMailConfigured();
   const unnotified = leads.filter((l) => !l.notified).length;
 
@@ -43,6 +48,39 @@ export default async function LeadsPage() {
           برای {unnotified} سرنخ ایمیل ارسال نشده (ستون «اعلان»). ممکن است تنظیمات SMTP مشکل
           داشته باشد.
         </p>
+      )}
+
+      {/* ---------- داغ‌ترین سرنخ‌ها ---------- */}
+      {hot.length > 0 && (
+        <section className="mt-8">
+          <h2 className="text-base font-extrabold text-ink-900">از این‌ها شروع کنید</h2>
+          <p className="mt-1 text-xs leading-loose text-ink-500">
+            پیگیری‌نشده‌هایی که بیشترین نشانه قصد خرید را نشان داده‌اند — مرتب‌شده بر اساس
+            امتیاز رفتاری، نه تاریخ.
+          </p>
+          <ul className="mt-3 space-y-2">
+            {hot.map((lead) => (
+              <li
+                key={lead.public_id}
+                className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-xl border border-accent-400 bg-accent-100 px-4 py-3"
+              >
+                <ScorePill score={lead.score} />
+                <span className="text-sm font-bold text-ink-900">{lead.name ?? "بدون نام"}</span>
+                <a href={`tel:${lead.phone}`} className="ltr tnum text-sm font-bold text-ink-900">
+                  {lead.phone}
+                </a>
+                {lead.business_type && (
+                  <span className="text-xs text-ink-600">{lead.business_type}</span>
+                )}
+                {!lead.is_complete && (
+                  <span className="rounded-md bg-white px-2 py-0.5 text-[0.7rem] font-bold text-ink-600">
+                    فرم نیمه‌کاره
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       {/* ---------- تماس‌های رزروشده ---------- */}
@@ -99,6 +137,12 @@ export default async function LeadsPage() {
                       {lead.business_type}
                     </span>
                   )}
+                  <ScorePill score={lead.score} />
+                  {!lead.is_complete && (
+                    <span className="rounded-md bg-accent-100 px-2 py-0.5 text-[0.7rem] font-bold text-accent-600">
+                      فرم نیمه‌کاره
+                    </span>
+                  )}
                   <span className="ms-auto text-xs text-ink-400">
                     {formatDateFa(lead.created_at)}
                   </span>
@@ -148,5 +192,21 @@ export default async function LeadsPage() {
         )}
       </section>
     </>
+  );
+}
+
+/** نشان امتیاز رفتاری — رنگش نشان می‌دهد چقدر باید عجله کرد */
+function ScorePill({ score }: { score: number }) {
+  const { label, tone } = scoreLabel(score);
+  const cls = {
+    hot: "bg-red-100 text-red-800",
+    warm: "bg-accent-100 text-accent-600",
+    cold: "bg-ink-100 text-ink-500",
+  }[tone];
+
+  return (
+    <span className={`rounded-md px-2 py-1 text-[0.7rem] font-bold ${cls}`} title="امتیاز رفتاری">
+      {label} · {formatNumber(score)}
+    </span>
   );
 }

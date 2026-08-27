@@ -41,12 +41,17 @@ export async function createLead(input: {
   productSlug: string | null;
   preferredSlot: string | null;
   source: string;
+  /** فرم ناقص (رهاشده) با false ثبت می‌شود */
+  isComplete?: boolean;
+  /** امتیاز رفتاری که کلاینت جمع کرده */
+  score?: number;
 }): Promise<Lead> {
   try {
     const rows = await query<Lead>(
       `insert into leads
-         (public_id, name, phone, business_type, message, product_slug, preferred_slot, source, is_complete)
-       values ($1, $2, $3, $4, $5, $6, $7, $8, true)
+         (public_id, name, phone, business_type, message, product_slug,
+          preferred_slot, source, is_complete, score)
+       values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        returning *`,
       [
         newPublicId(),
@@ -57,6 +62,8 @@ export async function createLead(input: {
         input.productSlug,
         input.preferredSlot,
         input.source,
+        input.isComplete ?? true,
+        input.score ?? 0,
       ],
     );
     return rows[0];
@@ -86,6 +93,21 @@ export async function bookedSlots(): Promise<Date[]> {
 
 export async function recentLeads(limit = 100): Promise<Lead[]> {
   return query<Lead>("select * from leads order by created_at desc limit $1", [limit]);
+}
+
+/**
+ * سرنخ‌های پیگیری‌نشده، داغ‌ترین اول.
+ * تیم فروش باید بداند از کجا شروع کند — نه صرفاً جدیدترین، بلکه
+ * کسی که بیشترین نشانه قصد خرید را نشان داده.
+ */
+export async function hotLeads(minScore = 10, limit = 20): Promise<Lead[]> {
+  return query<Lead>(
+    `select * from leads
+      where status = 'new' and score >= $1
+      order by score desc, created_at desc
+      limit $2`,
+    [minScore, limit],
+  );
 }
 
 /** تماس‌های رزروشده آینده — بالای صفحه سرنخ‌های پنل نمایش داده می‌شود */

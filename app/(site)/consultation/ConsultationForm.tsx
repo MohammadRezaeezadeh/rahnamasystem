@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { submitConsultationAction, type ConsultState } from "./actions";
 import type { DayGroup } from "@/lib/availability";
@@ -34,6 +34,68 @@ export function ConsultationForm({
   const [slot, setSlot] = useState("any");
   const [openDay, setOpenDay] = useState(days[0]?.key ?? "");
 
+  const formRef = useRef<HTMLFormElement>(null);
+  const submitted = useRef(false);
+
+  // نوشتن روی ref حین رندر مجاز نیست؛ بعد از موفقیت اینجا علامت می‌خورد
+  // تا ارسال دوباره‌ی همان اطلاعات به‌عنوان «فرم رهاشده» ثبت نشود.
+  useEffect(() => {
+    if (state.success) submitted.current = true;
+  }, [state.success]);
+
+  /**
+   * ثبت فرم رهاشده.
+   *
+   * اگر کاربر شماره معتبر وارد کرده ولی فرم را نفرستاده و صفحه را ترک
+   * می‌کند، همان اطلاعات به‌عنوان سرنخ ناقص ثبت می‌شود.
+   *
+   * sendBeacon انتخاب شده چون تنها روشی است که مرورگر تضمین می‌کند حتی
+   * هنگام بستن تب هم ارسال شود؛ fetch معمولی در آن لحظه قطع می‌شود.
+   *
+   * این رفتار در خود فرم به کاربر اطلاع داده شده — بدون آن اطلاع‌رسانی،
+   * ذخیره داده‌ای که کاربر عمداً نفرستاده کار درستی نیست.
+   */
+  useEffect(() => {
+    const flush = () => {
+      if (submitted.current || !formRef.current) return;
+
+      const data = new FormData(formRef.current);
+      const phone = String(data.get("phone") ?? "").trim();
+      if (!phone) return;
+
+      submitted.current = true; // فقط یک‌بار
+
+      const payload = JSON.stringify({
+        name: data.get("name"),
+        phone,
+        businessType: data.get("business_type"),
+        message: data.get("message"),
+        productSlug: data.get("product"),
+        score: window.rsScore?.() ?? 0,
+      });
+
+      try {
+        navigator.sendBeacon?.("/api/lead", new Blob([payload], { type: "application/json" }));
+        window.rsTrack?.("form_abandon", { path: "/consultation" });
+      } catch {
+        /* ترک صفحه نباید به‌خاطر این خطا بدهد */
+      }
+    };
+
+    // pagehide روی سافاری موبایل قابل‌اتکاتر از beforeunload است
+    const onHide = () => flush();
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") flush();
+    };
+
+    window.addEventListener("pagehide", onHide);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pagehide", onHide);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
   // بعد از موفقیت، فرم جای خودش را به پیام تأیید می‌دهد
   if (state.success) {
     return (
@@ -58,7 +120,7 @@ export function ConsultationForm({
   }
 
   return (
-    <form action={action} className="space-y-6">
+    <form ref={formRef} action={action} className="space-y-6">
       <input type="hidden" name="product" value={defaultProduct} />
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -196,7 +258,8 @@ export function ConsultationForm({
       <Submit />
 
       <p className="text-center text-xs leading-loose text-ink-500">
-        شماره شما فقط برای همین تماس استفاده می‌شود.
+        شماره شما فقط برای همین تماس استفاده می‌شود. اگر فرم را نیمه‌کاره رها کنید و
+        شماره‌تان را وارد کرده باشید، ممکن است برای پیگیری با شما تماس بگیریم.
       </p>
     </form>
   );

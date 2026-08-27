@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // خروجی standalone حجم دیپلوی روی لیارا را به‌شدت کم می‌کند
-  output: "standalone",
+  // عمداً output: "standalone" نداریم.
+  // اسکریپت start ما next start است و Next هشدار می‌دهد که این دو با هم
+  // کار نمی‌کنند؛ پوشه standalone فقط حجم build را زیاد می‌کرد.
   poweredByHeader: false,
   compress: true,
   images: {
