@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 const adminNav = [
   { href: "/admin", label: "خلاصه" },
   { href: "/admin/prices", label: "قیمت‌ها" },
+  { href: "/admin/landing", label: "لندینگ‌ها" },
   { href: "/admin/leads", label: "سرنخ‌ها" },
   { href: "/admin/orders", label: "سفارش‌ها" },
 ];
@@ -27,12 +28,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span className="text-sm font-extrabold text-ink-900">پنل مدیریت</span>
           </Link>
 
-          <nav className="flex items-center gap-1" aria-label="ناوبری پنل">
+          <nav className="-mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1" aria-label="ناوبری پنل">
             {adminNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-ink-600 transition-colors hover:bg-ink-100 hover:text-ink-900"
+                className="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-ink-600 transition-colors hover:bg-ink-100 hover:text-ink-900"
               >
                 {item.label}
               </Link>

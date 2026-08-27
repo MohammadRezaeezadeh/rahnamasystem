@@ -101,3 +101,45 @@ CREATE UNIQUE INDEX IF NOT EXISTS leads_slot_unique
 
 CREATE INDEX IF NOT EXISTS leads_slot_idx ON leads (preferred_slot)
   WHERE preferred_slot IS NOT NULL;
+
+-- =============================================================
+-- فاز ۳ — لندینگ‌پیج‌های صنفی و صفحات مقایسه
+-- =============================================================
+
+-- یک جدول برای هر دو نوع صفحه. تفاوتشان فقط در kind و چند فیلد
+-- اختصاصی است، پس قالب رندر مشترک می‌ماند و افزودن نوع سوم
+-- (مثلاً «سپیدار برای X») فقط یک مقدار جدید در kind است.
+CREATE TABLE IF NOT EXISTS landing_pages (
+  slug              TEXT PRIMARY KEY,
+  -- industry = صنف + منطقه، comparison = سپیدار در برابر رقیب
+  kind              TEXT NOT NULL DEFAULT 'industry',
+
+  -- سئو
+  title             TEXT NOT NULL,
+  description       TEXT NOT NULL,
+  h1                TEXT NOT NULL,
+  intro             TEXT,
+
+  -- محتوای بلوکی: [{ heading, body }]
+  sections          JSONB NOT NULL DEFAULT '[]'::jsonb,
+  -- [{ question, answer }] — به FAQPage schema تبدیل می‌شود
+  faqs              JSONB NOT NULL DEFAULT '[]'::jsonb,
+
+  -- مخصوص لندینگ صنفی
+  industry          TEXT,
+  area              TEXT,
+
+  -- مخصوص صفحه مقایسه: [{ feature, ours, theirs }]
+  competitor        TEXT,
+  comparison_rows   JSONB NOT NULL DEFAULT '[]'::jsonb,
+
+  -- اسلاگ محصولاتی که این صفحه به آن‌ها لینک داخلی می‌دهد
+  related_products  TEXT[] NOT NULL DEFAULT '{}',
+
+  -- تا published نباشد نه در sitemap می‌آید نه با URL باز می‌شود
+  published         BOOLEAN NOT NULL DEFAULT false,
+  created_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at        TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS landing_kind_idx ON landing_pages (kind, published);

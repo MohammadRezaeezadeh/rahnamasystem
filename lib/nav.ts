@@ -18,6 +18,7 @@ export const mainNav: NavItem[] = [
       description: p.summary,
     })),
   },
+  { label: "مقایسه‌ها", href: "/compare" },
   { label: "مشاوره و دمو", href: "/consultation" },
   { label: "وبلاگ", href: "/blog" },
   { label: "تماس با ما", href: "/contact" },
@@ -32,6 +33,7 @@ export const footerNav: { title: string; links: { label: string; href: string }[
     title: "خدمات ما",
     links: [
       { label: "مشاوره انتخاب بسته", href: "/consultation" },
+      { label: "مقایسه با سایر نرم‌افزارها", href: "/compare" },
       { label: "رزرو زمان تماس", href: "/consultation#booking" },
       { label: "وبلاگ و آموزش", href: "/blog" },
       { label: "تماس با ما", href: "/contact" },
