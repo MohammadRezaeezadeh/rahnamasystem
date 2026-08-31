@@ -1,5 +1,6 @@
 import "server-only";
 import { site } from "./site";
+import { formatNumber } from "./format";
 import { queryOne, isDatabaseConfigured } from "./db";
 import { availableProviders } from "./payments";
 import { isMailConfigured } from "./mail";
@@ -179,7 +180,7 @@ export async function getHealth(): Promise<HealthReport> {
       status: pricedCount > 0 ? "ok" : "todo",
       detail:
         pricedCount > 0
-          ? `${pricedCount} بسته قیمت دارد.`
+          ? `${formatNumber(pricedCount)} بسته قیمت دارد.`
           : "هیچ بسته‌ای قیمت ندارد و همه «استعلام قیمت» نشان می‌دهند.",
       action: pricedCount > 0 ? undefined : "در بخش قیمت‌ها، قیمت هر بسته را وارد کنید.",
       owner: "you",
@@ -191,7 +192,7 @@ export async function getHealth(): Promise<HealthReport> {
       id: "landing",
       title: "لندینگ‌پیج‌های صنفی",
       status: landingCount >= 3 ? "ok" : "warn",
-      detail: `${landingCount} صفحه منتشر شده.`,
+      detail: `${formatNumber(landingCount)} صفحه منتشر شده.`,
       action:
         landingCount >= 3
           ? undefined
@@ -205,7 +206,7 @@ export async function getHealth(): Promise<HealthReport> {
       id: "posts",
       title: "مقالات وبلاگ",
       status: postCount >= 3 ? "ok" : "warn",
-      detail: `${postCount} مقاله منتشر شده.`,
+      detail: `${formatNumber(postCount)} مقاله منتشر شده.`,
       action:
         postCount >= 3 ? undefined : "برای اینکه وبلاگ در گوگل دیده شود، حداقل سه مقاله لازم است.",
       owner: "you",
@@ -217,7 +218,7 @@ export async function getHealth(): Promise<HealthReport> {
       id: "admins",
       title: "کاربران پنل",
       status: adminCount > 0 ? "ok" : "todo",
-      detail: `${adminCount} کاربر تعریف شده.`,
+      detail: `${formatNumber(adminCount)} کاربر تعریف شده.`,
       action: adminCount > 0 ? undefined : "با دستور npm run db:create-admin کاربر بسازید.",
       owner: "dev",
       blocking: true,
