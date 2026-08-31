@@ -135,3 +135,73 @@ export async function hasAnyAdmin(): Promise<boolean> {
   const row = await queryOne<{ count: string }>("select count(*)::text as count from admin_users");
   return Number(row?.count ?? 0) > 0;
 }
+
+// ---------------------------------------------------------------- مدیریت کاربر
+
+/** فهرست کاربران پنل — برای صفحه تنظیمات */
+export async function listAdmins(): Promise<
+  (AdminUser & { created_at: string; last_login_at: string | null })[]
+> {
+  return query<AdminUser & { created_at: string; last_login_at: string | null }>(
+    "select id, username, display_name, created_at, last_login_at from admin_users order by id",
+  );
+}
+
+/**
+ * تغییر رمز کاربر فعلی.
+ * رمز فعلی هم خواسته می‌شود: اگر کسی پشت سیستمِ بازمانده بنشیند، نتواند
+ * بدون دانستن رمز، حساب را از دست صاحبش خارج کند.
+ */
+export async function changePassword(
+  userId: number,
+  currentPassword: string,
+  newPassword: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  if (newPassword.length < 8) {
+    return { ok: false, error: "رمز جدید باید حداقل ۸ کاراکتر باشد." };
+  }
+
+  const row = await queryOne<{ password_hash: string }>(
+    "select password_hash from admin_users where id = $1",
+    [userId],
+  );
+  if (!row) return { ok: false, error: "کاربر پیدا نشد." };
+
+  if (!(await verifyPassword(currentPassword, row.password_hash))) {
+    return { ok: false, error: "رمز فعلی اشتباه است." };
+  }
+
+  await query("update admin_users set password_hash = $2 where id = $1", [
+    userId,
+    await hashPassword(newPassword),
+  ]);
+  return { ok: true };
+}
+
+/** افزودن کاربر دوم — عمداً بدون سیستم نقش، هر دو دسترسی یکسان دارند */
+export async function addAdmin(
+  username: string,
+  password: string,
+  displayName: string | null,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const clean = username.trim().toLowerCase();
+
+  if (!/^[a-z0-9._-]{3,40}$/.test(clean)) {
+    return { ok: false, error: "نام کاربری فقط حروف کوچک انگلیسی، عدد، نقطه و خط تیره — ۳ تا ۴۰ کاراکتر." };
+  }
+  if (password.length < 8) {
+    return { ok: false, error: "رمز باید حداقل ۸ کاراکتر باشد." };
+  }
+
+  const existing = await queryOne<{ id: number }>(
+    "select id from admin_users where username = $1",
+    [clean],
+  );
+  if (existing) return { ok: false, error: "این نام کاربری قبلاً ثبت شده است." };
+
+  await query(
+    "insert into admin_users (username, password_hash, display_name) values ($1, $2, $3)",
+    [clean, await hashPassword(password), displayName?.trim() || null],
+  );
+  return { ok: true };
+}

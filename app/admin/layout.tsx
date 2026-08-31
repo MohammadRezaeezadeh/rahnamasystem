@@ -17,6 +17,7 @@ const adminNav = [
   { href: "/admin/landing", label: "لندینگ‌ها" },
   { href: "/admin/leads", label: "سرنخ‌ها" },
   { href: "/admin/orders", label: "سفارش‌ها" },
+  { href: "/admin/settings", label: "تنظیمات" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
