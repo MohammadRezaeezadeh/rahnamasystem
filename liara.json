@@ -1,5 +1,5 @@
 {
-  "platform": "next",
+  "platform": "docker",
   "app": "rahnama-system",
   "port": 3000,
   "build": {

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:deploy": "node scripts/build-deploy.mjs",
     "start": "next start -p ${PORT:-3000}",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",

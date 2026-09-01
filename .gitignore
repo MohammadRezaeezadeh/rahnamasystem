@@ -32,3 +32,10 @@ Thumbs.db
 coverage/
 .vercel
 *.tsbuildinfo
+
+# خروجی آماده‌ی استقرار — با npm run build:deploy ساخته می‌شود
+deploy/
+
+# بسته‌ی آپلود پنل لیارا — با npm run build:deploy ساخته می‌شود
+rahnama-deploy.zip
+.deploy-zip/
