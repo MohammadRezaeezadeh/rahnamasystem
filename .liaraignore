@@ -1,41 +1,54 @@
 # چیزهایی که به سرور build لیارا فرستاده نمی‌شوند.
 #
-# با پلتفرم docker، تنها چیزی که Dockerfile لازم دارد پوشه‌ی deploy/ است.
-# پس هرچه سنگین است بیرون می‌ماند و آپلود حدود ۲۳ مگابایت می‌شود
-# (سقف مجاز پلن: ۱۲۸ مگابایت).
+# نکته‌ی کلیدی — خطوط ! انتهای فایل را حذف نکن:
+#
+#   Liara CLI یک لیست هاردکد در create-archive.js دارد که پیش از هر فایل
+#   ignore اعمال می‌شود:
+#       .git .idea .vscode .next .dockerignore *.*~ liara.json
+#       node_modules bower_components .DS_Store
+#   این الگوها اسلش ابتدایی ندارند، یعنی در هر عمقی مطابقت می‌کنند و
+#   deploy/node_modules و deploy/.next را هم از بسته بیرون می‌اندازند.
+#   نتیجه‌اش این بود که فقط server.js آپلود می‌شد (۲۱۴ کیلوبایت) و اپ با
+#   «Cannot find module 'next'» بالا نمی‌آمد. تنها راهش خنثی‌کردن صریح
+#   همان الگوهاست، که در انتهای همین فایل آمده.
+#
+# ضمناً وقتی .liaraignore وجود دارد، CLI اصلاً .gitignore و .dockerignore
+# را نمی‌خواند — این فایل تنها مرجع است.
+#
+# با پلتفرم docker تنها چیزی که Dockerfile لازم دارد deploy/ است.
 
-# ۴۳۱ مگابایت. روی سرور هیچ‌وقت لازم نمی‌شود چون نصبی انجام نمی‌شود.
-node_modules
+# ۴۳۱ مگابایت. روی سرور هیچ‌وقت لازم نیست چون نصبی انجام نمی‌شود.
+/node_modules
 
 # خروجی خام build؛ نسخه‌ی مرتب‌شده‌اش داخل deploy/ است.
-.next
-out
-dist
+/.next
+/out
+/dist
 
-# سایت قدیمی: فقط برای مرجع نگه داشته شده و package.json جدا دارد.
-_legacy
+# بسته‌ی آپلود پنل — با CLI لازم نیست.
+/rahnama-deploy.zip
+/.deploy-zip
+
+# سایت قدیمی: فقط برای مرجع، package.json جدا دارد.
+/_legacy
 
 # ابزارهای محلی
-.mimocode
-.claude
-.git
-.vscode
-.idea
+/.mimocode
+/.claude
+/.vscode
+/.idea
 
 # متغیرهای محیطی — روی لیارا از پنل خودش خوانده می‌شوند
-.env
-.env.local
-.env.*.local
+/.env
+/.env.local
+/.env.*.local
 
 # متفرقه
 *.log
 .DS_Store
 Thumbs.db
-coverage
+/coverage
 
-# deploy/ در .gitignore هست چون خروجی build است و نباید commit شود.
-# این دو خط تضمین می‌کنند که اگر لیارا قواعد .gitignore را هم لحاظ کرد،
-# باز هم همین دو مورد آپلود شوند — بدون اینها build اصلاً چیزی برای
-# کپی‌کردن ندارد.
-!deploy/
-!Dockerfile
+# ↓↓↓ بدون این دو خط استقرار خراب می‌شود. توضیح در بالای فایل. ↓↓↓
+!deploy
+!deploy/**

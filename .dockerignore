@@ -1,0 +1,19 @@
+# context ساخت ایمیج — فقط deploy/ لازم است.
+#
+# ⚠ الگوها با / شروع می‌شوند تا فقط پوشه‌های ریشه را بگیرند.
+#   بدون آن، «node_modules» شاملِ deploy/node_modules هم می‌شود و اپ با
+#   «Cannot find module 'next'» بالا نمی‌آید.
+/node_modules
+/.next
+/out
+/dist
+/_legacy
+/.git
+/.claude
+/.mimocode
+/.env
+/.env.local
+/.env.*.local
+/rahnama-deploy.zip
+/.deploy-zip
+*.log

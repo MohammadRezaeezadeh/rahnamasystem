@@ -1,6 +1,6 @@
 {
   "platform": "docker",
-  "app": "rahnama-system",
+  "app": "rahnamasystem",
   "port": 3000,
   "build": {
     "location": "iran"
