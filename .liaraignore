@@ -31,3 +31,14 @@ _legacy
 .DS_Store
 Thumbs.db
 coverage
+
+# lockfile عمداً به build فرستاده نمی‌شود.
+#
+# اگر package-lock.json در context باشد، لیارا `npm ci` اجرا می‌کند؛
+# ci اول کل node_modules را پاک و ۴۵۰ مگابایت را از صفر می‌سازد و
+# همان‌جاست که پروسه می‌میرد. بدون lockfile لیارا `npm install` اجرا
+# می‌کند که مسیر کد دیگری دارد و سبک‌تر است. خود لیارا هم در پیام خطا
+# همین را پیشنهاد داده بود.
+#
+# lockfile در git می‌ماند و برای نصب محلی همچنان مرجع است.
+package-lock.json
